@@ -27,7 +27,7 @@ SIMILARITY_THRESHOLD = 0.50  # Lowered threshold for better recall
 MAX_RESULTS = 10  # Increased to get more context
 load_dotenv()
 MAX_CONTEXT_CHUNKS = 4  # Increased number of chunks per source
-API_KEY = os.getenv("API_KEY")  # Get API key from environment variable
+API_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IjIyZjIwMDA2NzVAZHMuc3R1ZHkuaWl0bS5hYy5pbiJ9.WIYCaGtTBkWPReqyX75CcZ1ganANaFB29mkuKj2lQEc"
 
 # Models
 class QueryRequest(BaseModel):
@@ -561,8 +561,8 @@ def parse_llm_response(response):
                 line = re.sub(r'^-\s*', '', line)
                 
                 # Extract URL and text using more flexible patterns
-                url_match = re.search(r'URL:\s*\[(.*?)\]|url:\s*\[(.*?)\]|\[(http[^\]]+)\]|URL:\s*(http\S+)|url:\s*(http\S+)|(http\S+)', line, re.IGNORECASE)
-                text_match = re.search(r'Text:\s*\[(.*?)\]|text:\s*\[(.*?)\]|[""](.*?)[""]|Text:\s*"(.*?)"|text:\s*"(.*?)"', line, re.IGNORECASE)
+                url_match = re.search(r'URL:\s*\[(.?)\]|url:\s\[(.?)\]|\[(http[^\]]+)\]|URL:\s(http\S+)|url:\s*(http\S+)|(http\S+)', line, re.IGNORECASE)
+                text_match = re.search(r'Text:\s*\[(.?)\]|text:\s\[(.?)\]|[""](.?)[""]|Text:\s*"(.?)"|text:\s"(.*?)"', line, re.IGNORECASE)
                 
                 if url_match:
                     # Find the first non-None group from the regex match
@@ -725,4 +725,4 @@ async def health_check():
         )
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host="0.0.0.0", port=10000, reload=True) 
+    uvicorn.run("app:app", host="localhost", port=8000, reload=True)
